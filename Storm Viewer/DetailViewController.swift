@@ -12,12 +12,14 @@ class DetailViewController: UIViewController {
   @IBOutlet var imageView: UIImageView!
   // Es un opcional porque inicialmente no se tendra ningun seleccionado
   var selectedImage: String?
+  var selectedImageCount: Int?
+  var selectedImagePosition: Int?
   
     override func viewDidLoad() {
       super.viewDidLoad()
       
       // Title Large on Item set Never
-      title = selectedImage
+      title = "Picture \(selectedImagePosition ?? 0) of \(selectedImageCount ?? 0)"
       navigationItem.largeTitleDisplayMode = .never
 
       
