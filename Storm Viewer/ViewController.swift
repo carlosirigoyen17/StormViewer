@@ -20,6 +20,9 @@ class ViewController: UITableViewController {
     title = "Storm Viewer"
     navigationController?.navigationBar.prefersLargeTitles = true
     
+    // Display button on navigationBar for Share Content
+    navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped(sender:)))
+    
     let fm = FileManager.default
     let path = Bundle.main.resourcePath!
     // Print
@@ -77,6 +80,42 @@ class ViewController: UITableViewController {
       vc.selectedImagePosition = indexPath.row + 1
       vc.totalImagesCount = pictures.count
       navigationController?.pushViewController(vc, animated: true)
+    }
+  }
+  
+  @objc func shareTapped(sender:UIView) {
+    // Para permitir el guardado de las imagenes en el dispositivo debemos aplicar un cambio sobre info.plist
+    // Añadir un nuevo Row, agregar Privacy Photo Library "Privacy - Photo Library Additions Usage Descrip" and add text description
+    
+    
+
+    
+//    let vc = UIActivityViewController(activityItems: [imageText!, image], applicationActivities: [])
+//    vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+//    present(vc, animated: true)
+    
+    
+    
+    
+    UIGraphicsBeginImageContext(view.frame.size)
+    view.layer.render(in: UIGraphicsGetCurrentContext()!)
+    let image = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    
+    print(image ?? "no hay nada")
+    let textToShare = "Check out my app"
+    
+    if let myWebsite = URL(string: "http://itunes.apple.com/app/idXXXXXXXXX") {//Enter link to your app here
+      let objectsToShare = [textToShare, myWebsite, image ?? #imageLiteral(resourceName: "app-logo")] as [Any]
+      let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+      
+      //Excluded Activities
+      activityVC.excludedActivityTypes = [UIActivity.ActivityType.airDrop, UIActivity.ActivityType.addToReadingList]
+      //
+      
+//      activityVC.popoverPresentationController?.sourceView = sender
+      activityVC.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+      self.present(activityVC, animated: true, completion: nil)
     }
   }
 
